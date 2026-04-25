@@ -22,6 +22,10 @@ reporting obligations.
 
 Senitnel caught this in 3 seconds.
 
+## Demo
+
+[Watch demo](https://youtu.be/1TEFgXgPFP8)
+
 
 ## How it works
 
