@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentinel Labs — Fraud Intelligence for Fintech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F4F1EB;
+      --bg2:      #EDEAE2;
+      --ink:      #0F0E0C;
+      --ink2:     #4A4740;
+      --ink3:     #8C8880;
+      --red:      #C0392B;
+      --red-dim:  #E8C5C1;
+      --border:   #D8D4CC;
+      --mono:     'DM Mono', monospace;
+      --serif:    'Instrument Serif', serif;
+      --sans:     'Geist', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .nav-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--ink);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg { width: 14px; height: 14px; fill: var(--bg); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--ink2);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-cta {
+      background: var(--ink);
+      color: var(--bg) !important;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-size: 13px !important;
+      text-decoration: none;
+      transition: opacity 0.2s !important;
+    }
+
+    .nav-cta:hover { opacity: 0.8; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 48px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .hero-left { }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(42px, 5vw, 64px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      color: var(--ink);
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--ink2);
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--ink2);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 420px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: var(--sans);
+      font-weight: 400;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary:hover { opacity: 0.75; }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      padding: 12px 24px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      font-family: var(--sans);
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--ink2); }
+
+    /* ── HERO STATS ── */
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      margin-top: 60px;
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+    }
+
+    .stat {
+      flex: 1;
+      padding-right: 24px;
+      border-right: 1px solid var(--border);
+      margin-right: 24px;
+    }
+
+    .stat:last-child {
+      border-right: none;
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    .stat-value {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+
+    /* ── HERO RIGHT — terminal ── */
+    .hero-right {
+      position: relative;
+    }
+
+    .terminal {
+      background: #0F0E0C;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+    }
+
+    .terminal-bar {
+      background: #1A1917;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FEBC2E; }
+    .dot-g { background: #28C840; }
+
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #666;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 2;
+      color: #888;
+      min-height: 320px;
+    }
+
+    .t-dim { color: #444; }
+    .t-white { color: #E8E6E0; }
+    .t-green { color: #57C687; }
+    .t-red { color: #E06C75; }
+    .t-yellow { color: #E5C07B; }
+    .t-blue { color: #61AFEF; }
+    .t-divider { color: #333; }
+
+    .terminal-line {
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .terminal-line:nth-child(1)  { animation-delay: 0.2s; }
+    .terminal-line:nth-child(2)  { animation-delay: 0.5s; }
+    .terminal-line:nth-child(3)  { animation-delay: 0.8s; }
+    .terminal-line:nth-child(4)  { animation-delay: 1.1s; }
+    .terminal-line:nth-child(5)  { animation-delay: 1.4s; }
+    .terminal-line:nth-child(6)  { animation-delay: 1.7s; }
+    .terminal-line:nth-child(7)  { animation-delay: 2.0s; }
+    .terminal-line:nth-child(8)  { animation-delay: 2.3s; }
+    .terminal-line:nth-child(9)  { animation-delay: 2.6s; }
+    .terminal-line:nth-child(10) { animation-delay: 2.9s; }
+    .terminal-line:nth-child(11) { animation-delay: 3.2s; }
+    .terminal-line:nth-child(12) { animation-delay: 3.5s; }
+    .terminal-line:nth-child(13) { animation-delay: 3.8s; }
+    .terminal-line:nth-child(14) { animation-delay: 4.1s; }
+    .terminal-line:nth-child(15) { animation-delay: 4.4s; }
+    .terminal-line:nth-child(16) { animation-delay: 4.7s; }
+
+    .slack-alert {
+      margin-top: 12px;
+      background: #1A1917;
+      border-left: 3px solid #57C687;
+      border-radius: 0 4px 4px 0;
+      padding: 10px 12px;
+      opacity: 0;
+      animation: fadeIn 0.4s 5s forwards;
+    }
+
+    .slack-alert-title {
+      color: #57C687;
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .slack-alert-body {
+      color: #888;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* ── SECTION ── */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 3vw, 48px);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--ink2);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ── INSIGHT BANNER ── */
+    .insight-banner {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 48px;
+      border-radius: 8px;
+      margin: 0 48px 80px;
+      max-width: 1004px;
+      margin-left: auto;
+      margin-right: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .insight-quote {
+      font-family: var(--serif);
+      font-size: 28px;
+      line-height: 1.3;
+      font-weight: 400;
+    }
+
+    .insight-quote em { 
+      font-style: italic; 
+      color: #C8C4BC;
+    }
+
+    .insight-right { }
+
+    .insight-point {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid #2A2926;
+    }
+
+    .insight-point:last-child { border-bottom: none; }
+
+    .insight-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #555;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .insight-text {
+      font-size: 14px;
+      color: #C8C4BC;
+      line-height: 1.5;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .step {
+      background: var(--bg);
+      padding: 32px 28px;
+      position: relative;
+    }
+
+    .step-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink3);
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+
+    .step-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+
+    /* ── PATTERNS ── */
+    .patterns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .pattern-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .pattern-card:hover { border-color: var(--ink2); }
+
+    .pattern-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--ink);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .pattern-icon svg { width: 18px; height: 18px; fill: var(--bg); }
+
+    .pattern-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .pattern-desc {
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .pattern-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--red-dim);
+      padding: 3px 8px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    /* ── ARCHITECTURE ── */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 48px;
+      align-items: start;
+    }
+
+    .arch-list { }
+
+    .arch-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arch-item:first-child { padding-top: 0; }
+    .arch-item:last-child { border-bottom: none; }
+
+    .arch-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ink);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .arch-item-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .arch-item-desc {
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.5;
+    }
+
+    .arch-code {
+      background: var(--ink);
+      border-radius: 8px;
+      padding: 28px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.9;
+      color: #888;
+    }
+
+    .ac-comment { color: #444; }
+    .ac-key { color: #61AFEF; }
+    .ac-val { color: #98C379; }
+    .ac-num { color: #E5C07B; }
+    .ac-white { color: #E8E6E0; }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 100px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.15;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: var(--ink2);
+      margin-bottom: 40px;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--ink3);
+    }
+
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink2);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 48px;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 60px 24px 40px; gap: 40px; }
+      .insight-banner { grid-template-columns: 1fr; margin: 0 24px 60px; padding: 32px 24px; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .patterns { grid-template-columns: 1fr; }
+      .arch-grid { grid-template-columns: 1fr; }
+      section { padding: 60px 24px; }
+      .divider { margin: 0 24px; }
+      footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    Senitnel Labs
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#patterns">Patterns</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="mailto:hello@senitnellabs.com" class="nav-cta">Request pilot</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Live threat detection</div>
+    <h1>Fraud happens<br><em>across accounts.</em><br>We see it.</h1>
+    <p class="hero-sub">
+      Every tool your team uses monitors one account at a time. 
+      Coordinated fraud is invisible to them. Senitnel watches 
+      behaviour across accounts — catching what no single-account 
+      tool ever sees.
+    </p>
+    <div class="hero-actions">
+      <a href="mailto:hello@senitnellabs.com" class="btn-primary">Request a pilot →</a>
+      <a href="#how" class="btn-secondary">See how it works</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">3s</div>
+        <div class="stat-label">Detection time</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Days</div>
+        <div class="stat-label">Without Senitnel</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Data leaves your infra</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-title">senitnel-agent</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line"><span class="t-dim">$</span> <span class="t-white">./senitnel-agent --watch transactions</span></div>
+        <div class="terminal-line"><span class="t-green">SENITNEL</span> <span class="t-dim">agent started — monitoring live stream</span></div>
+        <div class="terminal-line">&nbsp;</div>
+        <div class="terminal-line"><span class="t-dim">── tx received: </span><span class="t-yellow">acc_A_4421</span><span class="t-dim"> → quickmart@okaxis ₹49,000</span></div>
+        <div class="terminal-line"><span class="t-dim">   THINKS: near ₹50k threshold — investigating</span></div>
+        <div class="terminal-line"><span class="t-dim">   ACTS:   querying cluster for quickmart@okaxis</span></div>
+        <div class="terminal-line"><span class="t-dim">   OBSERVES: 1 account — too small, monitoring</span></div>
+        <div class="terminal-line">&nbsp;</div>
+        <div class="terminal-line"><span class="t-dim">── tx received: </span><span class="t-yellow">acc_C_2291</span><span class="t-dim"> → quickmart@okaxis ₹49,800</span></div>
+        <div class="terminal-line"><span class="t-dim">   OBSERVES: </span><span class="t-red">3 accounts — cluster detected</span></div>
+        <div class="terminal-line"><span class="t-dim">   ACTS:   tracing common origin...</span></div>
+        <div class="terminal-line"><span class="t-green">   FOUND:  acc_source_9921 funded all 3 — 72h ago</span></div>
+        <div class="terminal-line"><span class="t-dim">   ACTS:   calling LLM with full context</span></div>
+        <div class="terminal-line">&nbsp;</div>
+        <div class="terminal-line"><span class="t-red">   RISK: CRITICAL</span><span class="t-dim"> — structuring + mule network</span></div>
+        <div class="terminal-line"><span class="t-green">   ACTION: freeze accounts + alert RBI</span></div>
+        <div class="slack-alert">
+          <div class="slack-alert-title">⚡ #fraud-alerts — Senitnel Labs</div>
+          <div class="slack-alert-body">
+            CRITICAL: Coordinated structuring detected<br>
+            Accounts: acc_A, acc_B, acc_C · Combined: ₹1,47,300<br>
+            Origin: acc_source_9921 · Action: freeze + investigate
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- INSIGHT BANNER -->
+<div class="insight-banner">
+  <div class="insight-quote">
+    "The real problem is not detection. It's that <em>no one is pulling everything together.</em> The full picture appears late — even though pieces were there from the start."
+  </div>
+  <div class="insight-right">
+    <div class="insight-point">
+      <span class="insight-num">01</span>
+      <span class="insight-text">Fraud teams take days to weeks to connect signals that were visible from day one</span>
+    </div>
+    <div class="insight-point">
+      <span class="insight-num">02</span>
+      <span class="insight-text">Risk, operations and legal each hold one piece — no system connects them</span>
+    </div>
+    <div class="insight-point">
+      <span class="insight-num">03</span>
+      <span class="insight-text">Every individual action looks legitimate. The behaviour across them does not.</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">Six layers of autonomous reasoning</h2>
+  <p class="section-sub">
+    Senitnel doesn't match rules. It reasons — across accounts, 
+    across time, across teams — the way a senior analyst would.
+  </p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 — Ingest</div>
+      <div class="step-title">Watches your log stream</div>
+      <div class="step-desc">Reads transactions as they arrive. Never stores raw data. Processes and moves on.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02 — Filter</div>
+      <div class="step-title">Ignores 99% of noise</div>
+      <div class="step-desc">Lightweight Go rules eliminate obvious noise before LLM reasoning begins. Only real signals advance.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03 — Correlate</div>
+      <div class="step-title">Connects the dots</div>
+      <div class="step-desc">6-month memory traces hidden relationships across accounts. Same origin. Same destination. Same timing.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04 — Reason</div>
+      <div class="step-title">LLM sees the full picture</div>
+      <div class="step-desc">Fine-tuned model reasons about the group — not individual events. Identifies FATF typologies and RBI implications.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PATTERNS -->
+<section id="patterns">
+  <div class="section-label">What it catches</div>
+  <h2 class="section-title">Fraud patterns no single tool sees</h2>
+  <p class="section-sub">Every pattern involves legitimate actions. The fraud is only visible when you look across accounts simultaneously.</p>
+  <div class="patterns">
+    <div class="pattern-card">
+      <div class="pattern-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke="white" stroke-width="2" fill="none"/></svg>
+      </div>
+      <div class="pattern-title">UPI Structuring</div>
+      <div class="pattern-desc">
+        5 accounts send ₹49,000 each to the same merchant UPI within 4 hours. Different IPs. Different devices. Combined: ₹2.4 lakh — all below the reporting threshold.
+      </div>
+      <span class="pattern-tag">FATF Typology 23</span>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="pattern-title">Insider Data Theft</div>
+      <div class="pattern-desc">
+        Employee with legitimate access views 340 merchant profiles in 90 minutes at 11pm. Each access individually valid. The volume and timing is not.
+      </div>
+      <span class="pattern-tag">Insider Threat</span>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="pattern-title">Weekly Slip Detection</div>
+      <div class="pattern-desc">
+        Suspicious event count increasing week over week — never enough to trigger a single alert, always just below the threshold. Visible only across 4 weeks of memory.
+      </div>
+      <span class="pattern-tag">Slow Moving Fraud</span>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="pattern-title">Vendor Access Drift</div>
+      <div class="pattern-desc">
+        KYC vendor's API key starts hitting transaction history endpoints after 6 months of normal operation. Each call returns 200 OK. No firewall fires. Senitnel does.
+      </div>
+      <span class="pattern-tag">Third Party Risk</span>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="pattern-title">Mule Network</div>
+      <div class="pattern-desc">
+        Multiple accounts receive funds from one hidden source, then forward to the same destination. Traced across 96 hours. Common origin identified automatically.
+      </div>
+      <span class="pattern-tag">Money Laundering</span>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="pattern-title">Cross-Team Signal Gap</div>
+      <div class="pattern-desc">
+        Risk flags account. Operations raises ticket. Legal gets inquiry. All about the same entity. Senitnel connects all three and surfaces the full picture in one alert.
+      </div>
+      <span class="pattern-tag">Coordination Failure</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-label">Architecture</div>
+  <h2 class="section-title">Runs inside your infrastructure.<br>Nothing leaves.</h2>
+  <p class="section-sub">One Docker container. Zero external API calls in production. Architecturally incapable of sending your data anywhere.</p>
+
+  <div class="arch-grid">
+    <div class="arch-list">
+      <div class="arch-item">
+        <div class="arch-dot"></div>
+        <div>
+          <div class="arch-item-title">Private deployment</div>
+          <div class="arch-item-desc">Ships as a Docker container pulled into your environment. You control everything. We never have access to your systems.</div>
+        </div>
+      </div>
+      <div class="arch-item">
+        <div class="arch-dot"></div>
+        <div>
+          <div class="arch-item-title">Local LLM inference</div>
+          <div class="arch-item-desc">Fine-tuned model runs inside the container. No Claude API. No OpenAI. No data leaves your network for inference.</div>
+        </div>
+      </div>
+      <div class="arch-item">
+        <div class="arch-dot"></div>
+        <div>
+          <div class="arch-item-title">Three-layer memory</div>
+          <div class="arch-item-desc">Hot memory (2 hours), warm memory (30 days), cold baseline (6 months). Catches fast attacks and slow ones alike.</div>
+        </div>
+      </div>
+      <div class="arch-item">
+        <div class="arch-dot"></div>
+        <div>
+          <div class="arch-item-title">PCI-DSS & RBI compliant by design</div>
+          <div class="arch-item-desc">Data localisation satisfied. No third-party data processor. Audit trail included. Compliance conversation is simple.</div>
+        </div>
+      </div>
+      <div class="arch-item">
+        <div class="arch-dot"></div>
+        <div>
+          <div class="arch-item-title">One command installation</div>
+          <div class="arch-item-desc">docker pull + docker run. No agents on every machine. No SDK integration. No 6-month implementation project.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-code">
+      <span class="ac-comment"># installation — that's it</span><br>
+      docker pull registry.senitnellabs.com/agent:v1<br>
+      docker run --env-file config.env senitnel-agent<br>
+      <br>
+      <span class="ac-comment"># config.env — stays on your side</span><br>
+      <span class="ac-key">SENITNEL_LOG_SOURCE</span>=<span class="ac-val">/var/log/transactions</span><br>
+      <span class="ac-key">SENITNEL_ALERT_CHANNEL</span>=<span class="ac-val">your-slack-webhook</span><br>
+      <span class="ac-key">SENITNEL_THRESHOLD</span>=<span class="ac-val">high</span><br>
+      <span class="ac-key">SENITNEL_MEMORY_DAYS</span>=<span class="ac-num">180</span><br>
+      <br>
+      <span class="ac-comment"># what we never receive</span><br>
+      <span class="ac-white">your_transactions</span>  = <span class="ac-val">stays local</span><br>
+      <span class="ac-white">your_user_data</span>     = <span class="ac-val">stays local</span><br>
+      <span class="ac-white">your_alerts</span>        = <span class="ac-val">stays local</span><br>
+      <span class="ac-white">inference_calls</span>    = <span class="ac-val">stays local</span><br>
+      <br>
+      <span class="ac-comment"># outbound connections: zero</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to see what<br><em>your tools are missing?</em></h2>
+  <p>30-day pilot. Your sandbox. Your team in control. No procurement required.</p>
+  <div class="cta-actions">
+    <a href="mailto:hello@senitnellabs.com" class="btn-primary">Request a pilot →</a>
+    <a href="mailto:hello@senitnellabs.com" class="btn-secondary">Talk to us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Senitnel Labs</span>
+  <span>Behavioural fraud intelligence for Indian fintech firms</span>
+  <span>hello@senitnellabs.com</span>
+</footer>
+
+</body>
+</html>
